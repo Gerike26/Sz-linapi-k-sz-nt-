@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BirthdayCard Pro | Egyedi születésnapi köszöntő</title>
+<style>
+:root{--accent:#8b5cf6;--accent2:#06b6d4;--bg:#050b19;--panel:#0c1730;--text:#f8fafc;--muted:#aab8d4}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,#14254a 0%,var(--bg) 55%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Arial,sans-serif;min-height:100vh}
+header{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px 4vw;border-bottom:1px solid #ffffff17;background:#071022c9;position:sticky;top:0;z-index:5;backdrop-filter:blur(12px)}
+.brand{display:flex;gap:12px;align-items:center;font-weight:850;font-size:1.15rem}.brand-icon{font-size:2rem}.brand span{color:#a78bfa}
+header small{display:block;color:var(--muted);font-size:.78rem;font-weight:500}
+header a{color:#fff;text-decoration:none;background:linear-gradient(110deg,var(--accent),#d946ef);padding:11px 17px;border-radius:999px;font-size:.9rem;font-weight:750}
+main{max-width:1450px;margin:auto;padding:28px 22px 40px}
+.hero{text-align:center;padding:8px 0 26px;position:relative}
+.hero h1{font-size:clamp(2rem,4vw,3.1rem);line-height:1.12;margin:12px 0;background:linear-gradient(90deg,#fff,#c4b5fd,#67e8f9);color:transparent;background-clip:text}
+.hero p{color:#c4d0e8;margin:8px auto;max-width:720px}
+.workspace{display:grid;grid-template-columns:330px minmax(0,1fr);gap:18px;align-items:start}
+.panel,.preview-wrap{background:linear-gradient(150deg,#0c1730ed,#071022ed);border:1px solid #ffffff18;border-radius:18px;box-shadow:0 18px 60px #0004}
+.panel{padding:18px}
+.section{margin-bottom:20px}.section h3{font-size:.98rem;margin:0 0 12px;display:flex;align-items:center;gap:9px}.number{display:inline-grid;place-items:center;width:27px;height:27px;border-radius:50%;background:linear-gradient(130deg,var(--accent),#5b7cfa);font-size:.8rem}
+label{display:block;color:#c7d2e8;font-size:.83rem;margin:10px 0 6px}
+input,textarea,select{width:100%;border:1px solid #304365;background:#081329;color:white;border-radius:10px;padding:11px 12px;font:inherit;outline:none}
+input:focus,textarea:focus,select:focus{border-color:#a78bfa;box-shadow:0 0 0 3px #8b5cf633}
+textarea{resize:vertical;min-height:76px}
+.bg-options{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bg-choice{height:58px;border-radius:10px;border:2px solid transparent;cursor:pointer;position:relative;overflow:hidden}
+.bg-choice.active{border-color:#c4b5fd;box-shadow:0 0 0 2px #8b5cf644}
+.bg-choice:after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,#fff1,transparent)}
+.bg-night{background:radial-gradient(circle at 60% 30%,#e879f9,#161e62 35%,#080b20)}
+.bg-sunset{background:linear-gradient(#f9a8d4,#fb923c,#312e81)}
+.bg-ocean{background:linear-gradient(#38bdf8,#1d4ed8,#07152d)}
+.bg-gold{background:linear-gradient(140deg,#fef3c7,#d97706,#451a03)}
+.bg-forest{background:linear-gradient(#86efac,#15803d,#052e16)}
+.bg-candy{background:linear-gradient(130deg,#f9a8d4,#c084fc,#67e8f9)}
+.toggles{display:grid;gap:9px}
+.toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#dbeafe;font-size:.9rem}
+.toggle input{width:18px;height:18px;accent-color:var(--accent)}
+.colors{display:flex;gap:10px;flex-wrap:wrap}
+.color{width:29px;height:29px;border:3px solid #ffffff22;border-radius:50%;cursor:pointer}
+.color.active{outline:2px solid white;outline-offset:2px}
+.btn{border:0;border-radius:12px;padding:13px 15px;background:linear-gradient(100deg,var(--accent),#287cff);color:white;font:inherit;font-weight:800;cursor:pointer;transition:transform .2s,filter .2s}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.12)}
+.btn.full{width:100%}.btn.secondary{background:#172747;border:1px solid #ffffff1c;margin-top:8px}
+.preview-wrap{padding:10px}
+.preview{position:relative;min-height:490px;border-radius:13px;overflow:hidden;isolation:isolate;display:flex;align-items:center;justify-content:center;text-align:center;padding:30px 18px;background:radial-gradient(circle at 50% 40%,#4c1d95,#10134c 42%,#05091a 78%);transition:background .4s}
+.preview[data-bg="sunset"]{background:linear-gradient(160deg,#f9a8d4,#fb923c 45%,#312e81)}
+.preview[data-bg="ocean"]{background:radial-gradient(circle at 50% 35%,#0e7490,#1d4ed8 40%,#061329)}
+.preview[data-bg="gold"]{background:radial-gradient(circle at 50% 25%,#fbbf24,#92400e 45%,#1c1010)}
+.preview[data-bg="forest"]{background:radial-gradient(circle at 50% 25%,#4ade80,#166534 40%,#052e16)}
+.preview[data-bg="candy"]{background:radial-gradient(circle at 50% 25%,#f0abfc,#7c3aed 48%,#164e63)}
+.preview:before{content:"";position:absolute;inset:0;z-index:-1;background-image:radial-gradient(#fff 1px,transparent 1.5px),radial-gradient(#fff 1px,transparent 1.5px);background-size:65px 65px,101px 101px;background-position:0 0,22px 35px;opacity:.25}
+.preview-content{position:relative;z-index:2;max-width:800px;width:100%}
+.eyebrow{font-size:.85rem;letter-spacing:.25em;text-transform:uppercase;color:#e9d5ff;font-weight:800}
+.preview h2{font-size:clamp(2.6rem,7vw,5.6rem);line-height:1.02;margin:16px 0 10px;color:#fff;text-shadow:0 5px 0 #7c3aed,0 0 24px #f0abfc,0 0 55px #c084fc;animation:titleFloat 3s ease-in-out infinite}
+.preview .message{font-size:clamp(1rem,2vw,1.35rem);color:#fff;text-shadow:0 2px 10px #0008;white-space:pre-wrap}
+.preview .recipient{color:#fde68a;font-size:clamp(1.2rem,3vw,2rem);font-weight:850;text-shadow:0 0 20px #f59e0b;margin:12px 0}
+.cake{font-size:clamp(4rem,9vw,7rem);filter:drop-shadow(0 10px 16px #0007);animation:cakeBob 2.5s ease-in-out infinite;margin-top:14px}
+.preview .signature{font-size:1rem;color:#f5d0fe;margin-top:15px}
+.floaties{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1}
+.balloon{position:absolute;bottom:-140px;font-size:clamp(2rem,5vw,4rem);animation:rise 10s linear infinite;filter:drop-shadow(0 5px 10px #0005)}
+.balloon:nth-child(1){left:4%;animation-delay:-2s}.balloon:nth-child(2){left:20%;animation-delay:-7s}.balloon:nth-child(3){right:8%;animation-delay:-4s}.balloon:nth-child(4){right:25%;animation-delay:-9s}
+.confetti{position:absolute;top:-20px;width:9px;height:14px;background:var(--confetti,#f472b6);left:var(--left);animation:fall var(--duration) linear infinite;animation-delay:var(--delay);opacity:.9}
+.firework{position:absolute;left:var(--x);top:var(--y);width:7px;height:7px;border-radius:50%;background:#fde68a;box-shadow:0 0 12px 5px #f0abfc,0 0 25px 10px #818cf8;animation:pop 2.6s ease-out infinite;animation-delay:var(--delay)}
+.controls{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 4px 2px;color:var(--muted);font-size:.85rem}
+.preview-actions{display:flex;gap:8px;flex-wrap:wrap}
+.features{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
+.feature{border:1px solid #ffffff13;background:#0b1530a8;border-radius:14px;padding:18px 12px;text-align:center}.feature b{display:block;margin:8px 0}.feature p{color:var(--muted);font-size:.83rem;margin:0;line-height:1.5}.feature .emoji{font-size:1.7rem}
+footer{text-align:center;color:#b9a3ff;font-size:1.1rem;font-style:italic;margin:26px 0 0}
+.hidden{display:none!important}
+@keyframes titleFloat{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-8px) rotate(1deg)}}
+@keyframes cakeBob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-8px) rotate(2deg)}}
+@keyframes rise{0%{transform:translateY(0) rotate(-8deg);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-700px) rotate(12deg);opacity:0}}
+@keyframes fall{to{transform:translate3d(60px,650px,0) rotate(700deg)}}
+@keyframes pop{0%,100%{transform:scale(.1);opacity:0}25%{transform:scale(1);opacity:1}55%{transform:scale(.3);opacity:0}}
+@media(max-width:900px){.workspace{grid-template-columns:1fr}.panel{order:2}.preview-wrap{order:1}.preview{min-height:420px}.features{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){header{padding:13px 15px}.brand{font-size:1rem}header a{padding:9px 12px;font-size:.8rem}main{padding:18px 12px}.preview{min-height:390px;padding:22px 10px}.features{grid-template-columns:1fr 1fr}.controls{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="brand-icon">🎂</div><div>BirthdayCard <span>Pro</span><small>Egyedi szülinapi köszöntők, ahogy te szeretnéd!</small></div></div>
+  <a href="#szerkeszto">✦ Személyre szabás</a>
+</header>
+<main>
+  <section class="hero">
+    <h1>Készíts egyedi születésnapi köszöntőt!</h1>
+    <p>Szerkeszd át az üzenetet, válassz hátteret és indíts látványos animációkat.</p>
+    <p>Lepd meg a szeretteidet egy saját készítésű, különleges köszöntővel!</p>
+  </section>
+  <div class="workspace" id="szerkeszto">
+    <aside class="panel">
+      <div class="section">
+        <h3><span class="number">1</span> ✏️ Szöveg szerkesztése</h3>
+        <label for="titleInput">Főcím</label><input id="titleInput" maxlength="70" value="Boldog Születésnapot!">
+        <label for="nameInput">Ünnepelt neve</label><input id="nameInput" maxlength="45" value="Kedves Barátom!">
+        <label for="messageInput">Személyes üzenet</label><textarea id="messageInput" maxlength="240">Sok boldogságot, egészséget és minden jót kívánok neked!</textarea>
+        <label for="fromInput">Aláírás</label><input id="fromInput" maxlength="60" value="Szeretettel ❤️">
+      </div>
+      <div class="section">
+        <h3><span class="number">2</span> 🖼️ Háttér kiválasztása</h3>
+        <div class="bg-options">
+          <button class="bg-choice bg-night active" data-bg="night" aria-label="Éjszakai háttér"></button>
+          <button class="bg-choice bg-sunset" data-bg="sunset" aria-label="Naplemente háttér"></button>
+          <button class="bg-choice bg-ocean" data-bg="ocean" aria-label="Óceán háttér"></button>
+          <button class="bg-choice bg-gold" data-bg="gold" aria-label="Arany háttér"></button>
+          <button class="bg-choice bg-forest" data-bg="forest" aria-label="Erdő háttér"></button>
+          <button class="bg-choice bg-candy" data-bg="candy" aria-label="Cukorka háttér"></button>
+        </div>
+      </div>
+      <div class="section">
+        <h3><span class="number">3</span> ✨ Animációk</h3>
+        <div class="toggles">
+          <label class="toggle">🎊 Konfettieső <input type="checkbox" id="confettiToggle" checked></label>
+          <label class="toggle">🎆 Tűzijáték <input type="checkbox" id="fireworkToggle" checked></label>
+          <label class="toggle">🎈 Lebegő lufik <input type="checkbox" id="balloonToggle" checked></label>
+          <label class="toggle">💫 Mozgó cím <input type="checkbox" id="motionToggle" checked></label>
+        </div>
+      </div>
+      <div class="section">
+        <h3><span class="number">4</span> 🎨 Színvilág</h3>
+        <div class="colors">
+          <button class="color active" style="background:#8b5cf6" data-color="#8b5cf6" aria-label="Lila"></button>
+          <button class="color" style="background:#0284c7" data-color="#0284c7" aria-label="Kék"></button>
+          <button class="color" style="background:#db2777" data-color="#db2777" aria-label="Rózsaszín"></button>
+          <button class="color" style="background:#eab308" data-color="#eab308" aria-label="Arany"></button>
+          <button class="color" style="background:#16a34a" data-color="#16a34a" aria-label="Zöld"></button>
+          <button class="color" style="background:#f97316" data-color="#f97316" aria-label="Narancs"></button>
+        </div>
+      </div>
+      <button class="btn full" id="previewBtn">▶ Köszöntő megnyitása</button>
+      <button class="btn secondary full" id="shareBtn">🔗 Megosztható link készítése</button>
+      <button class="btn secondary full" id="resetBtn">↺ Alaphelyzet visszaállítása</button>
+    </aside>
+    <section class="preview-wrap">
+      <div class="preview" id="preview" data-bg="night">
+        <div class="floaties" id="balloons"><span class="balloon">🎈</span><span class="balloon">🎈</span><span class="balloon">🎈</span><span class="balloon">🎈</span></div>
+        <div class="floaties" id="confetti"></div>
+        <div class="floaties" id="fireworks"></div>
+        <div class="preview-content">
+          <div class="eyebrow">✨ Ma minden rólad szól ✨</div>
+          <h2 id="previewTitle">Boldog<br>Születésnapot!</h2>
+          <div class="recipient" id="previewName">Kedves Barátom!</div>
+          <p class="message" id="previewMessage">Sok boldogságot, egészséget és minden jót kívánok neked!</p>
+          <div class="cake">🎂</div>
+          <div class="signature" id="previewFrom">Szeretettel ❤️</div>
+        </div>
+      </div>
+      <div class="controls"><span>✨ Élő előnézet, minden módosítás azonnal megjelenik</span><div class="preview-actions"><button class="btn" id="fullscreenBtn">⛶ Teljes képernyő</button><button class="btn secondary" id="copyBtn">📋 Szöveg másolása</button></div></div>
+    </section>
+  </div>
+  <section class="features">
+    <div class="feature"><div class="emoji">💜</div><b>Teljesen személyre szabható</b><p>Írd meg a saját üzenetedet, add meg az ünnepelt nevét.</p></div>
+    <div class="feature"><div class="emoji">⚡</div><b>Látványos animációk</b><p>Konfetti, tűzijáték, lebegő lufik és mozgó feliratok.</p></div>
+    <div class="feature"><div class="emoji">🎨</div><b>Saját színvilág</b><p>Válassz a különböző színek és háttérstílusok közül.</p></div>
+    <div class="feature"><div class="emoji">📱</div><b>Minden eszközön</b><p>Számítógépen, tableten és mobilon is használható.</p></div>
+  </section>
+  <footer>Tedd felejthetetlenné a születésnapot! ♡</footer>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const fields=['titleInput','nameInput','messageInput','fromInput'];
+function updatePreview(){
+  const title=$('titleInput').value.trim()||'Boldog Születésnapot!';
+  $('previewTitle').innerHTML=escapeHTML(title).replace(/\n/g,'<br>').replace(/Születésnapot!?/i,m=>m);
+  $('previewName').textContent=$('nameInput').value;
+  $('previewMessage').textContent=$('messageInput').value;
+  $('previewFrom').textContent=$('fromInput').value;
+}
+function escapeHTML(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+fields.forEach(id=>$(id).addEventListener('input',updatePreview));
+document.querySelectorAll('.bg-choice').forEach(btn=>btn.addEventListener('click',()=>{
+  document.querySelectorAll('.bg-choice').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');$('preview').dataset.bg=btn.dataset.bg;
+}));
+document.querySelectorAll('.color').forEach(btn=>btn.addEventListener('click',()=>{
+  document.querySelectorAll('.color').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  document.documentElement.style.setProperty('--accent',btn.dataset.color);
+}));
+function buildConfetti(){
+  const root=$('confetti');root.innerHTML='';
+  for(let i=0;i<65;i++){const el=document.createElement('i');el.className='confetti';el.style.setProperty('--left',Math.random()*100+'%');el.style.setProperty('--duration',(5+Math.random()*7)+'s');el.style.setProperty('--delay',(-Math.random()*12)+'s');el.style.setProperty('--confetti',['#f472b6','#22d3ee','#facc15','#a78bfa','#4ade80','#fb7185'][i%6]);root.appendChild(el);}
+}
+function buildFireworks(){
+  const root=$('fireworks');root.innerHTML='';
+  for(let i=0;i<8;i++){const el=document.createElement('i');el.className='firework';el.style.setProperty('--x',(8+Math.random()*84)+'%');el.style.setProperty('--y',(8+Math.random()*75)+'%');el.style.setProperty('--delay',(-Math.random()*3)+'s');root.appendChild(el);}
+}
+function syncToggles(){
+  $('confetti').classList.toggle('hidden',!$('confettiToggle').checked);
+  $('fireworks').classList.toggle('hidden',!$('fireworkToggle').checked);
+  $('balloons').classList.toggle('hidden',!$('balloonToggle').checked);
+  $('previewTitle').style.animation=$('motionToggle').checked?'titleFloat 3s ease-in-out infinite':'none';
+  $('previewTitle').style.textShadow=$('motionToggle').checked?'0 5px 0 #7c3aed,0 0 24px #f0abfc,0 0 55px #c084fc':'0 0 18px #c084fc';
+}
+['confettiToggle','fireworkToggle','balloonToggle','motionToggle'].forEach(id=>$(id).addEventListener('change',syncToggles));
+$('previewBtn').addEventListener('click',()=>{$('preview').scrollIntoView({behavior:'smooth',block:'center'});$('preview').animate([{transform:'scale(.98)'},{transform:'scale(1)'}],{duration:450});});
+$('fullscreenBtn').addEventListener('click',async()=>{try{if(!document.fullscreenElement)await $('preview').requestFullscreen();else await document.exitFullscreen();}catch(e){alert('A teljes képernyő nem érhető el ebben a böngészőben.');}});
+$('copyBtn').addEventListener('click',async()=>{const text=`${$('titleInput').value}\n${$('nameInput').value}\n${$('messageInput').value}\n${$('fromInput').value}`;try{await navigator.clipboard.writeText(text);$('copyBtn').textContent='✓ Másolva!';setTimeout(()=>$('copyBtn').textContent='📋 Szöveg másolása',1800)}catch(e){prompt('Másold ki a köszöntő szövegét:',text)}});
+$('shareBtn').addEventListener('click',async()=>{
+  const data={title:$('titleInput').value,name:$('nameInput').value,message:$('messageInput').value,from:$('fromInput').value,bg:$('preview').dataset.bg,color:getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()};
+  const url=new URL(location.href);url.hash='card='+encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(data)))));
+  try{await navigator.clipboard.writeText(url.href);alert('A megosztható link a vágólapra került. A link akkor működik másoknál is, ha ezt a HTML-oldalt feltöltöd egy webtárhelyre.');}catch(e){prompt('Másold ki a megosztható linket:',url.href)}
+});
+function loadShared(){
+ try{const match=location.hash.match(/card=([^&]+)/);if(!match)return;const data=JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(match[1])))));$('titleInput').value=data.title||'';$('nameInput').value=data.name||'';$('messageInput').value=data.message||'';$('fromInput').value=data.from||'';if(data.bg){$('preview').dataset.bg=data.bg;document.querySelectorAll('.bg-choice').forEach(b=>b.classList.toggle('active',b.dataset.bg===data.bg));}if(data.color){document.documentElement.style.setProperty('--accent',data.color);document.querySelectorAll('.color').forEach(b=>b.classList.toggle('active',b.dataset.color===data.color));}updatePreview();}catch(e){}
+}
+$('resetBtn').addEventListener('click',()=>{if(!confirm('Visszaállítod az alapértelmezett köszöntőt?'))return;$('titleInput').value='Boldog Születésnapot!';$('nameInput').value='Kedves Barátom!';$('messageInput').value='Sok boldogságot, egészséget és minden jót kívánok neked!';$('fromInput').value='Szeretettel ❤️';$('preview').dataset.bg='night';document.querySelectorAll('.bg-choice').forEach(b=>b.classList.toggle('active',b.dataset.bg==='night'));document.documentElement.style.setProperty('--accent','#8b5cf6');document.querySelectorAll('.color').forEach(b=>b.classList.toggle('active',b.dataset.color==='#8b5cf6'));['confettiToggle','fireworkToggle','balloonToggle','motionToggle'].forEach(id=>$(id).checked=true);updatePreview();syncToggles();});
+buildConfetti();buildFireworks();loadShared();updatePreview();syncToggles();
+</script>
+</body>
+</html>
